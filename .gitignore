@@ -7,3 +7,4 @@ resources/public/assets/*
 .clj-kondo
 .cpcache
 .lsp
+.git
