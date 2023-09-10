@@ -1,0 +1,6 @@
+{
+ :db/xtdb {
+           :tx-log "data/dev/tx-log"
+           :document-store "data/dev/document-store"
+           :index-store "data/dev/index-store"}
+}

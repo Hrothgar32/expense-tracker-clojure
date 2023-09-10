@@ -1,0 +1,9 @@
+.DS_Store
+.idea
+*.log
+tmp/
+resources/public/assets/*
+.dir-locals.el
+.clj-kondo
+.cpcache
+.lsp

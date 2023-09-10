@@ -1,0 +1,20 @@
+{:paths ["src/clj" "src/cljs"]
+ :deps {;; microframework, DI
+        integrant/integrant {:mvn/version "0.8.1"}
+        ;; server
+        ring/ring {:mvn/version "1.10.0"}
+        ;; router
+        metosin/reitit {:mvn/version "0.7.0-alpha5"}
+        ;; xtdb dependencies
+        com.xtdb/xtdb-core {:mvn/version "1.24.0"}
+        com.xtdb/xtdb-rocksdb {:mvn/version "1.24.0"}
+        ;; middlewares
+        metosin/muuntaja {:mvn/version "0.6.8"}
+        ;; authorization and authentication facilities
+        buddy/buddy-auth {:mvn/version "3.0.1"}
+        ;; signing JWT-s
+        buddy/buddy-sign {:mvn/version "3.5.351"}
+        ;; password hashers
+        buddy/buddy-hashers {:mvn/version "2.0.167"}}
+ :aliases {:dev {:extra-deps {integrant/repl {:mvn/version "0.3.3"}}}
+           :extra-paths ["env/dev/clj"]}}
