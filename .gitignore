@@ -8,3 +8,4 @@ resources/public/assets/*
 .cpcache
 .lsp
 .git
+data/
