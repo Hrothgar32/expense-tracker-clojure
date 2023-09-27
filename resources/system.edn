@@ -1,6 +1,11 @@
 {
- :db/xtdb {
-           :tx-log "data/dev/tx-log"
+ :server/http
+ {:port 3001
+  :handler #ig/ref :handler/ring}
+
+ :handler/ring {}
+
+;; XTDB configuration
+ :db/xtdb {:tx-log "data/dev/tx-log"
            :document-store "data/dev/document-store"
-           :index-store "data/dev/index-store"}
-}
+           :index-store "data/dev/index-store"}}

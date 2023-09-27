@@ -1,4 +1,5 @@
-{:paths ["src/clj" "src/cljs"]
+{:paths ["src/clj" "src/cljs"
+         "resources"]
  :deps {;; microframework, DI
         integrant/integrant {:mvn/version "0.8.1"}
         ;; server
@@ -15,6 +16,13 @@
         ;; signing JWT-s
         buddy/buddy-sign {:mvn/version "3.5.351"}
         ;; password hashers
-        buddy/buddy-hashers {:mvn/version "2.0.167"}}
- :aliases {:dev {:extra-deps {integrant/repl {:mvn/version "0.3.3"}}}
-           :extra-paths ["env/dev/clj"]}}
+        buddy/buddy-hashers {:mvn/version "2.0.167"}
+           ;; Logging
+        ch.qos.logback/logback-classic {:mvn/version "1.4.11"}
+
+        }
+ :aliases {:dev {:extra-deps {integrant/repl {:mvn/version "0.3.3"}
+                              com.lambdaisland/classpath {:mvn/version "0.4.44"}}
+                :extra-paths ["env/dev/clj" "env/dev/resources"]
+                 }
+           }}
