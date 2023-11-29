@@ -1,7 +1,9 @@
 (ns expense-tracker.web.handler
   (:require
    [integrant.core :as ig]
-   [reitit.ring :as ring]))
+   [muuntaja.core :as m]
+   [reitit.ring :as ring]
+   [reitit.ring.middleware.muuntaja :as muuntaja]))
 
 (defmethod ig/init-key :handler/ring
   [_ {:keys [router]}]
@@ -11,4 +13,6 @@
 (defmethod ig/init-key :router/core
   [_ {:keys [routes]}]
   (ring/router
-   routes))
+   routes
+   {:data {:muuntaja m/instance
+           :middleware [muuntaja/format-middleware]}}))
