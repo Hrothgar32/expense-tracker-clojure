@@ -1,6 +1,7 @@
 (ns app.core
   (:require [reagent.dom :as rdom]
-            [reagent.core :as r]))
+            [reagent.core :as r]
+            [re-frame.core :as rf]))
 
 (def options ["USD" "RON" "EUR"])
 
@@ -31,10 +32,13 @@
     [:button.bg-green-500.hover:bg-green-700.text-white.font-bold.rounded.p-2.mt-3 {:type "submit"}
      "Submit amount"]]])
 
-(defn ^:dev/after-load init []
+(defn ^:dev/after-load mount-root []
   (rdom/render [:div.w-full.max-w-xl.m-auto
                 [transaction-list]
                 [form-component]] (js/document.querySelector "#app")))
+
+(defn init! []
+  (mount-root))
 
 (comment
   (print "Hello"))
