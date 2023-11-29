@@ -3,7 +3,14 @@
  {:port 3001
   :handler #ig/ref :handler/ring}
 
- :handler/ring {}
+ :router/routes
+ {:db #ig/ref :db/xtdb}
+
+ :router/core
+ {:routes #ig/ref :router/routes}
+
+ :handler/ring
+ {:router #ig/ref :router/core}
 
 ;; XTDB configuration
  :db/xtdb {:tx-log "data/dev/tx-log"
