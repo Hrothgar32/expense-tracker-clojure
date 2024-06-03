@@ -2,7 +2,7 @@
   (:require
    [integrant.core :as ig]
    ;; Edges
-   [expense-tracker.database.core]
+   [expense-tracker.web.routes.api]
    [expense-tracker.server.core]
    [expense-tracker.web.handler])
   (:gen-class))
@@ -13,6 +13,9 @@
   (->> (ig/read-string (slurp "resources/system.edn"))
        (ig/init)
        (reset! system)))
+
+(comment
+  "This is a string")
 
 (defn stop-app []
   (ig/halt! @system))

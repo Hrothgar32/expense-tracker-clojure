@@ -5,7 +5,7 @@
    [reitit.swagger-ui :as swagger-ui]))
 
 (defmethod ig/init-key :router/routes
-  [_ {:keys [db]}]
+  [_ value]
   (println "Initializing routes")
   [["/api" (fn [_] {:status 200 :body "Hello"})]
    ["" {:no-doc true}
