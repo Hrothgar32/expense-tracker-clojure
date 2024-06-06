@@ -2,7 +2,9 @@
 (ns expense-tracker.recipe-scraping.enlive
   (:require
    [clojure.string :as string]
-   [net.cgrand.enlive-html :as html]))
+   [net.cgrand.enlive-html :as html]
+   [ring.util.http-response :as response]
+   ))
 
 (defn- fetch-url [url]
   (html/html-resource (java.net.URL. url)))
@@ -68,6 +70,12 @@
     {:ingredients (parse-ingredients page-content)
      :title (parse-title page-content)
      :steps (parse-steps page-content)}))
+
+(defn parse-recipe-controller [req]
+  (let [stuff (get-in req [:parameters :query :recipeURL])]
+    (response/ok
+     (parse-recipe stuff))))
+
 
 (comment
   (def page-content

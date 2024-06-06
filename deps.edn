@@ -4,6 +4,7 @@
         integrant/integrant {:mvn/version "0.8.1"}
         ;; server
         ring/ring {:mvn/version "1.10.0"}
+        metosin/ring-http-response {:mvn/version "0.9.3"}
         ;; router
         metosin/reitit {:mvn/version "0.7.0-alpha5"}
         ;; xtdb dependencies

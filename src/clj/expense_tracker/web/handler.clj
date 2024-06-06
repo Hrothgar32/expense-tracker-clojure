@@ -2,8 +2,11 @@
   (:require
    [integrant.core :as ig]
    [muuntaja.core :as m]
+   [reitit.coercion.malli :as malli]
    [reitit.ring :as ring]
-   [reitit.ring.middleware.muuntaja :as muuntaja]))
+   [reitit.ring.coercion :as coercion]
+   [reitit.ring.middleware.muuntaja :as muuntaja]
+   [reitit.ring.middleware.parameters :as parameters]))
 
 (defmethod ig/init-key :handler/ring
   [_ {:keys [router]}]
@@ -14,5 +17,15 @@
   [_ {:keys [routes]}]
   (ring/router
    routes
-   {:data {:muuntaja m/instance
-           :middleware [muuntaja/format-middleware]}}))
+   {:data {:coercion malli/coercion
+           :muuntaja m/instance
+           :middleware [
+                        ;; query-params & form-params
+                        parameters/parameters-middleware
+                        ;; request/response middleware
+                        muuntaja/format-middleware
+                        ;; coercion
+                        coercion/coerce-exceptions-middleware
+                        coercion/coerce-request-middleware
+                        coercion/coerce-response-middleware
+                        ]}}))
