@@ -1,6 +1,8 @@
 (ns app.core
   (:require [reagent.dom :as rdom]
+            [day8.re-frame.http-fx]
             [reagent.core :as r]
+            [ajax.core :as ajax]
             [re-frame.core :as rf]))
 
 (def options ["USD" "RON" "EUR"])
@@ -34,14 +36,31 @@
  (fn [fields [_ id value]]
    (assoc fields id value)))
 
+(rf/reg-event-fx
+ :get-recipe
+ (fn [db]
+   {
+    :http-xhrio {
+                 :method :get
+                 :uri "http://google.com"
+                 :response-format (ajax/text-response-format)
+                 :params (get (:form/fields db) :name)
+                 }
+    }))
+
+(rf/reg-event-db
+  :success-http-result
+  (fn [db [_ result]]
+    (assoc db :success-http-result result)))
+
+(rf/reg-event-db
+  :failure-http-result
+  (fn [db [_ result]]
+    ;; result is a map containing details of the failure
+    (assoc db :failure-http-result result)))
 
 ;; Components
 
-(defn transaction-list []
-  [:div.bg-red.shadow-md.rounded.mb-2
-   [:h1.font-bold "Transactions"]
-   [:ul
-    ]])
 
 (defn text-input [{:keys [value attributes on-save]}]
   (let [draft (r/atom nil)
@@ -71,26 +90,22 @@
 
 (defn form-component []
   [:form.bg-white.shadow-md.rounded.px-8.pb-1.w-full
-   {:on-submit #()}
+   {:on-submit (fn [e]
+                 (.preventDefault e)
+                 (rf/dispatch [:get-recipe]))}
    [:div.mb-4
-    [:label.block.m-auto "Amount owed"]
+    [:label.block.m-auto "Link"]
     [:div.flex.gap-2
      [text-input {:attributes {:name :amount}
                   :value (rf/subscribe [:form/field :name])
                   :on-save #(rf/dispatch [:form/set-field :name %])}]
-     [select-input {:attributes {:name :currency}
-                    :options options
-                    :value (rf/subscribe [:form/field :currency])
-                    :on-save #(rf/dispatch [:form/set-field :currency %])
-                    }
-      ]]
+     ]
     [:button.bg-green-500.hover:bg-green-700.text-white.font-bold.rounded.p-2.mt-3 {:type "submit"}
      "Submit amount"]]])
 
 (defn ^:dev/after-load mount-root []
   (rf/clear-subscription-cache!)
   (rdom/render [:div.w-full.max-w-xl.m-auto
-                [transaction-list]
                 [form-component]] (js/document.querySelector "#app")))
 
 (defn init! []

@@ -4,17 +4,17 @@
    [clojure.string :as string]
    [net.cgrand.enlive-html :as html]))
 
-(defn fetch-url [url]
+(defn- fetch-url [url]
   (html/html-resource (java.net.URL. url)))
 
-(defn split-on-space [word]
+(defn- split-on-space [word]
   (string/split word #"\s+"))
 
-(defn squish [line]
+(defn- squish [line]
   (string/triml (string/join " "
      (split-on-space (string/replace line #"\n" " ")))))
 
-(defn sanitize-ingredient-vector [ingredient-vector]
+(defn- sanitize-ingredient-vector [ingredient-vector]
   (filter (fn [ingredient-vector]
             (and (not (= ingredient-vector "\n- "))
                  (not (= ingredient-vector "\n"))
@@ -52,21 +52,32 @@
 
 (defn parse-title [page-content]
   (-> page-content
-      (html/select #{[:div.entry-lead]})
+      (html/select #{[:h1.entry-title]})
       first
       html/text
       squish))
 
+(defn parse-steps [page-content]
+  (as-> page-content content
+    (html/select content #{[:div.the-content-div :p]})
+    (map html/text content)
+    (take-while #(not (string/starts-with? % "Ha tetszett")) content)))
+
 (defn parse-recipe [page-url]
   (let [page-content (fetch-url page-url)]
     {:ingredients (parse-ingredients page-content)
-     :title (parse-title page-content)}))
+     :title (parse-title page-content)
+     :steps (parse-steps page-content)}))
 
 (comment
   (def page-content
     (fetch-url "https://streetkitchen.hu/hust-hussal/mustaros-tokany/"))
 
   (squish (html/text (first (html/select page-content #{[:div.entry-lead]}))))
+
+  (def page-content (fetch-url "https://streetkitchen.hu/instant/egyszeru-levesek/avokadokremleves/"))
+
+  (map #(-> % html/text) (html/select page-content #{[:div.the-content-div :p]}))
 
   (parse-recipe "https://streetkitchen.hu/instant/egyszeru-levesek/avokadokremleves/")
 

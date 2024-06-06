@@ -35,7 +35,7 @@
                               day8.re-frame/tracing {:mvn/version "0.6.2"}
                               binaryage/devtools {:mvn/version "1.0.7"}
                               ;; Ajax library
-                              cljs-ajax/cljs-ajax {:mvn/version "0.8.4"}
+                              day8.re-frame/http-fx {:mvn/version "0.2.4"}
                                }}
 
            :dev {:extra-deps {integrant/repl {:mvn/version "0.3.3"}
